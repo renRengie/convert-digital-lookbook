@@ -1,3 +1,13 @@
 templates/*.json
 templates/**/*.json
 config/settings_data.json
+
+# Frontend tooling — not part of the theme
+frontend/
+node_modules/
+package.json
+package-lock.json
+vite.config.js
+README.md
+.github/
+docs/
