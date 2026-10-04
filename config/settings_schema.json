@@ -2116,5 +2116,19 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Lookbook",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Required for the Lookbook feature. Paste in the public Storefront API token from your Headless sales channel. This token is read-only and safe to store here."
+      },
+      {
+        "type": "text",
+        "id": "lookbook_storefront_token",
+        "label": "Storefront API token"
+      }
+    ]
   }
 ]

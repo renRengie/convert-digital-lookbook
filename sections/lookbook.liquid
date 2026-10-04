@@ -1,0 +1,120 @@
+{% comment %}
+  Lookbook — Homepage Section
+  Renders a single merchant-selected lookbook on the homepage.
+  The merchant picks which lookbook to display via the Theme Customiser.
+  If no lookbook is selected, a placeholder is shown in the editor.
+{% endcomment %}
+
+{%- assign lookbook = section.settings.lookbook -%}
+
+{%- if request.design_mode and lookbook == blank -%}
+  <div class="lookbook-placeholder">
+    <p>Select a lookbook in the Theme Customiser to display it here.</p>
+  </div>
+
+{%- elsif lookbook != blank -%}
+  {%- capture lookbooks_json -%}
+    {%- render 'lookbook-json', lookbook: lookbook -%}
+  {%- endcapture -%}
+
+  {%- render 'lookbook-mount', lookbooks_json: lookbooks_json, section: section -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lookbook",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "metaobject",
+      "id": "lookbook",
+      "label": "Lookbook",
+      "metaobject_type": "lookbook"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "horizontal-scroll", "label": "Horizontal scroll" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Pricing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at",
+      "label": "Show compare-at price",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook"
+    }
+  ]
+}
+{% endschema %}
