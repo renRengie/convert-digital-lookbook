@@ -57,16 +57,18 @@ export function Lookbooks({ lookbooks, settings, context, api }) {
 
   return (
     <div className="lookbook-section">
-      {visibleLookbooks.map((lookbook) => (
-        <Lookbook
-          key={lookbook.handle}
-          lookbook={lookbook}
-          products={products}
-          settings={settings}
-          locale={locale}
-          rootUrl={rootUrl}
-        />
-      ))}
+      <div className="lookbook-section__inner">
+        {visibleLookbooks.map((lookbook) => (
+          <Lookbook
+            key={lookbook.handle}
+            lookbook={lookbook}
+            products={products}
+            settings={settings}
+            locale={locale}
+            rootUrl={rootUrl}
+          />
+        ))}
+      </div>
     </div>
   )
 }
