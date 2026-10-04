@@ -1,9 +1,5 @@
 # Shopify CLI
 .shopify/
-shopify.theme.toml
-
-# Theme customizer data (store-specific, not for version control)
-config/settings_data.json
 
 # OS files
 .DS_Store
@@ -23,3 +19,6 @@ yarn-error.log*
 .env
 .env.local
 .env*.local
+
+# Vite cache
+.vite/
