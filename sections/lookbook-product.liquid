@@ -1,0 +1,136 @@
+{% comment %}
+  Lookbook — Product Page Section
+  Auto-renders any lookbooks that contain the current product's handle.
+  No lookbook picker — matching is done automatically in Liquid.
+  Capped at MAX_LOOKBOOKS (2) matches, controlled by the priority field
+  on each lookbook metaobject (higher priority = shown first).
+
+  Note: section settings are intentionally duplicated from lookbook.liquid
+  because Liquid section schemas cannot be shared across files.
+  If shared settings change, update both section schemas.
+{% endcomment %}
+
+{%- assign matched_lookbooks = '' -%}
+{%- assign match_count = 0 -%}
+{%- assign max_lookbooks = 2 -%}
+
+{%- paginate shop.metaobjects.lookbook.values by 50 -%}
+  {%- for lookbook in shop.metaobjects.lookbook.values -%}
+    {%- if match_count >= max_lookbooks -%}
+      {%- break -%}
+    {%- endif -%}
+
+    {%- assign handles = lookbook.product_handles.value -%}
+
+    {%- if handles contains product.handle -%}
+      {%- capture current_lookbook_json -%}
+        {%- render 'lookbook-json', lookbook: lookbook -%}
+      {%- endcapture -%}
+
+      {%- if match_count == 0 -%}
+        {%- assign matched_lookbooks = current_lookbook_json -%}
+      {%- else -%}
+        {%- assign matched_lookbooks = matched_lookbooks | append: ',' | append: current_lookbook_json -%}
+      {%- endif -%}
+
+      {%- assign match_count = match_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endpaginate -%}
+
+{%- if match_count > 0 -%}
+  {%- render 'lookbook-mount', lookbooks_json: matched_lookbooks, section: section -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lookbook",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "horizontal-scroll", "label": "Horizontal scroll" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Pricing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at",
+      "label": "Show compare-at price",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook"
+    }
+  ]
+}
+{% endschema %}

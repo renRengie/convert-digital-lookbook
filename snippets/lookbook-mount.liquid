@@ -1,0 +1,48 @@
+{% comment %}
+  Shared snippet used by both lookbook.liquid and lookbook-product.liquid.
+
+  Renders:
+  - A <script type="application/json"> tag containing the full config for React
+  - A mount div where React will render the Lookbook components
+  - The lookbook.css and lookbook.js assets (deferred)
+
+  Expected variables:
+  - lookbooks_json: a comma-separated string of serialised lookbook JSON objects
+  - section: the current section object (for settings and section ID)
+{% endcomment %}
+
+<div data-lookbook-section>
+  {%- comment -%}
+    Config script sits OUTSIDE the React root div intentionally.
+    createRoot() replaces the root's children on render, which would
+    delete this script tag if it were inside the mount div.
+  {%- endcomment -%}
+  <script type="application/json" data-lookbook-config>
+    {
+      "lookbooks": [{{ lookbooks_json }}],
+      "settings": {
+        "show_description": {{ section.settings.show_description }},
+        "layout": {{ section.settings.layout | json }},
+        "columns_desktop": {{ section.settings.columns_desktop }},
+        "columns_mobile": {{ section.settings.columns_mobile }},
+        "show_compare_at": {{ section.settings.show_compare_at }}
+      },
+      "context": {
+        "country": {{ localization.country.iso_code | json }},
+        "language": {{ localization.language.iso_code | upcase | replace: '-', '_' | json }},
+        "locale": {{ request.locale.iso_code | append: '-' | append: localization.country.iso_code | json }},
+        "rootUrl": {{ routes.root_url | json }}
+      },
+      "api": {
+        "domain": {{ shop.permanent_domain | json }},
+        "token": {{ settings.lookbook_storefront_token | json }},
+        "version": "2025-01"
+      }
+    }
+  </script>
+
+  <div data-lookbook-root></div>
+</div>
+
+{{ 'lookbook.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'lookbook.js' | asset_url }}" defer></script>
