@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { Lookbooks } from './components/Lookbooks'
+import './lookbook.css'
 
 // Guard against double execution if the script tag is rendered more than once
 if (!window.__LOOKBOOK_INITIALISED__) {
