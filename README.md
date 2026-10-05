@@ -102,7 +102,7 @@ npm run check     # shopify theme check
 1. **Metaobject definition** — Settings → Custom data → Metaobjects → type `lookbook` with the fields above. Enable Storefronts API access.
 2. **Headless channel** — install from the Shopify App Store, create a storefront, copy the public token
 3. **Theme settings** — Theme Customiser → Theme settings → Lookbook → paste the token
-4. **Markets** — Settings → Markets → add Australia (AUD) and Japan (JPY)
+4. **Markets** — Settings → Markets → US and Canada are included by default. Add Australia (AUD) and Japan (JPY) for additional currency support
 5. **Publish products** — each product in a lookbook needs to be published to the Headless sales channel
 6. **Create lookbooks** — Content → Metaobjects → Lookbook → Add entry
 
@@ -121,5 +121,6 @@ npm run check     # shopify theme check
 - To test the 2-lookbook cap, visit **The Videographer Snowboard** — it's in 3 lookbooks but only 2 should show, sorted by priority
 
 **Market pricing**
-- Use the country selector on the storefront to switch between Australia and Japan
-- Prices should update to AUD and JPY respectively
+- Use the country selector on the storefront to switch between any of the four markets — United States, Canada, Australia, and Japan
+- Prices should update to USD, CAD, AUD, and JPY respectively
+- JPY prices will display with no decimal places, handled automatically by `Intl.NumberFormat`
