@@ -66,7 +66,7 @@ These settings are duplicated across both section schemas because Liquid doesn't
 
 ## Markets
 
-The store has two markets set up — **Australia (AUD)** and **Japan (JPY)**.
+The store has four active markets — **United States (USD)**, **Canada (CAD)**, **Australia (AUD)**, and **Japan (JPY)**. US and Canada are the store defaults. Australia and Japan were added specifically to demonstrate multi-currency support.
 
 The Storefront API query uses `@inContext(country: $country, language: $language)` to return prices in the right currency for whoever is browsing. The country and language are read from Liquid's localisation object and passed through to React.
 
