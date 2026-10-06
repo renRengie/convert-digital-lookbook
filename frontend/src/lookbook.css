@@ -16,6 +16,14 @@
   padding: 0 2rem;
 }
 
+/* Reduce side padding on mobile when horizontal scroll is active so the
+   scrollable track reaches the screen edges without overflowing */
+@media (max-width: 749px) {
+  .lookbook-section__inner:has(.lookbook__grid--horizontal-scroll) {
+    padding: 0 1rem;
+  }
+}
+
 /* Loading state — empty div while React fetches products */
 .lookbook-section__loading {
   min-height: 200px;
@@ -41,17 +49,74 @@
    ============================================================================= */
 
 .lookbook {
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 }
 
 .lookbook:last-child {
   margin-bottom: 0;
 }
 
-/* Header */
-.lookbook__header {
-  text-align: center;
-  margin-bottom: 2rem;
+/* =============================================================================
+   Side-by-side layout (when image is set)
+   Mobile: image stacks above products
+   Desktop: image and products sit side by side
+   ============================================================================= */
+
+.lookbook--left,
+.lookbook--right {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+@media (min-width: 750px) {
+  .lookbook--left,
+  .lookbook--right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 600px;
+  }
+
+  /* Image on right — swap order */
+  .lookbook--right .lookbook__image-wrapper {
+    order: 2;
+  }
+
+  .lookbook--right .lookbook__products {
+    order: 1;
+  }
+}
+
+/* Editorial image */
+.lookbook__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 400px;
+}
+
+@media (min-width: 750px) {
+  .lookbook__image-wrapper {
+    height: 100%;
+    min-height: 600px;
+  }
+}
+
+.lookbook__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Title and description overlaid on the image */
+.lookbook__image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.6) 0%, transparent 100%);
+  color: #ffffff;
 }
 
 .lookbook__title {
@@ -62,21 +127,61 @@
   line-height: var(--font-h2--line-height);
   letter-spacing: var(--font-h2--letter-spacing);
   text-transform: var(--font-h2--case);
+  margin: 0 0 0.5rem;
+}
+
+/* Title colour when overlaid on image */
+.lookbook__image-overlay .lookbook__title {
+  color: #ffffff;
+}
+
+/* Title colour when no image (fallback header) */
+.lookbook__header .lookbook__title {
   color: var(--color-foreground);
-  margin: 0 0 0.75rem;
 }
 
 .lookbook__description {
   font-family: var(--font-paragraph--family);
   font-size: var(--font-paragraph--size);
   line-height: var(--font-paragraph--line-height);
+  margin: 0;
+  opacity: 0.9;
+}
+
+.lookbook__image-overlay .lookbook__description {
+  color: #ffffff;
+}
+
+/* Fallback header when no image */
+.lookbook__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.lookbook__header .lookbook__description {
   color: rgb(var(--color-foreground-rgb) / 0.7);
   max-width: 600px;
   margin: 0 auto;
 }
 
+/* Products side */
+.lookbook__products {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+@media (max-width: 749px) {
+  .lookbook__products:has(.lookbook__grid--horizontal-scroll) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 /* =============================================================================
-   Grid Layout
+   Grid Layout (no-image fallback or inside products panel)
    ============================================================================= */
 
 .lookbook__grid {
