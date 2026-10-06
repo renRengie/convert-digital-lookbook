@@ -22,9 +22,10 @@
       "lookbooks": [{{ lookbooks_json }}],
       "settings": {
         "show_description": {{ section.settings.show_description }},
+        "image_position": {{ section.settings.image_position | json }},
         "layout": {{ section.settings.layout | json }},
         "columns_desktop": {{ section.settings.columns_desktop }},
-        "columns_mobile": {{ section.settings.columns_mobile }},
+        "columns_mobile": {{ section.settings.columns_mobile | plus: 0 }},
         "show_compare_at": {{ section.settings.show_compare_at }}
       },
       "context": {
@@ -36,7 +37,7 @@
       "api": {
         "domain": {{ shop.permanent_domain | json }},
         "token": {{ settings.lookbook_storefront_token | json }},
-        "version": "2025-01"
+        "version": "2026-07"
       }
     }
   </script>
@@ -46,3 +47,4 @@
 
 {{ 'lookbook.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'lookbook.js' | asset_url }}" defer></script>
+

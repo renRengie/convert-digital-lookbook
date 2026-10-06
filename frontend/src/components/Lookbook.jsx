@@ -1,9 +1,11 @@
 import { ProductCard } from './ProductCard'
 
 /**
- * Renders a single lookbook — its heading, optional description,
- * and a grid of product cards.
- * Skips any product handles that returned null (unpublished, deleted, or typo).
+ * Renders a single lookbook in a side-by-side layout.
+ * On desktop: editorial image on one side, product cards on the other.
+ * Image position (left/right) is controlled by the section setting.
+ * On mobile: image always stacks above the product cards.
+ * If no image is set on the metaobject, falls back to a standard grid layout.
  *
  * @param {object}   props
  * @param {object}   props.lookbook       - Lookbook metaobject data from Liquid
@@ -13,9 +15,10 @@ import { ProductCard } from './ProductCard'
  * @param {string}   props.rootUrl        - From routes.root_url
  */
 export function Lookbook({ lookbook, products, settings, locale, rootUrl }) {
-  const { title, description, product_handles } = lookbook
+  const { title, description, product_handles, image } = lookbook
   const {
     show_description,
+    image_position,
     layout,
     columns_desktop,
     columns_mobile,
@@ -30,32 +33,53 @@ export function Lookbook({ lookbook, products, settings, locale, rootUrl }) {
   if (resolvedProducts.length === 0) return null
 
   return (
-    <div className="lookbook">
-      <div className="lookbook__header">
-        <h2 className="lookbook__title">{title}</h2>
-        {show_description && description && (
-          <p className="lookbook__description">{description}</p>
-        )}
-      </div>
+    <div className={`lookbook lookbook--${image && image_position ? image_position : 'no-image'}`}>
+      {image && (
+        <div className="lookbook__image-wrapper">
+          <img
+            src={image}
+            alt={title}
+            className="lookbook__image"
+            loading="lazy"
+          />
+          <div className="lookbook__image-overlay">
+            <h2 className="lookbook__title">{title}</h2>
+            {show_description && description && (
+              <p className="lookbook__description">{description}</p>
+            )}
+          </div>
+        </div>
+      )}
 
-      <ul
-        className={`lookbook__grid lookbook__grid--${layout}`}
-        style={{
-          '--columns-desktop': columns_desktop,
-          '--columns-mobile': columns_mobile,
-        }}
-      >
-        {resolvedProducts.map((product) => (
-          <li key={product.handle} className="lookbook__item">
-            <ProductCard
-              product={product}
-              showCompareAt={show_compare_at}
-              locale={locale}
-              rootUrl={rootUrl}
-            />
-          </li>
-        ))}
-      </ul>
+      <div className="lookbook__products">
+        {!image && (
+          <div className="lookbook__header">
+            <h2 className="lookbook__title">{title}</h2>
+            {show_description && description && (
+              <p className="lookbook__description">{description}</p>
+            )}
+          </div>
+        )}
+
+        <ul
+          className={`lookbook__grid lookbook__grid--${layout}`}
+          style={{
+            '--columns-desktop': columns_desktop,
+            '--columns-mobile': columns_mobile,
+          }}
+        >
+          {resolvedProducts.map((product) => (
+            <li key={product.handle} className="lookbook__item">
+              <ProductCard
+                product={product}
+                showCompareAt={show_compare_at}
+                locale={locale}
+                rootUrl={rootUrl}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }

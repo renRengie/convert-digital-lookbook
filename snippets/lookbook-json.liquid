@@ -3,5 +3,6 @@
   "title": {{ lookbook.title.value | json }},
   "description": {{ lookbook.description.value | json }},
   "priority": {{ lookbook.priority.value | default: 0 }},
-  "product_handles": {{ lookbook.product_handles.value | json }}
+  "product_handles": {{ lookbook.product_handles.value | json }},
+  "image": {{ lookbook.image.value | image_url: width: 1200 | json }}
 }
